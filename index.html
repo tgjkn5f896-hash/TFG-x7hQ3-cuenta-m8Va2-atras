@@ -73,6 +73,11 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     <div class="bar"><span id="barFill"></span></div>
   </section>
 
+  <section class="nextbox">
+    <h3>Próxima sesión disponible</h3>
+    <p id="nextSession">—</p>
+  </section>
+
   <div class="controls">
     <button id="togglePast" type="button">Ocultar días pasados</button>
     <button id="jumpToday" type="button">Ir a hoy</button>
@@ -80,7 +85,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <div class="legend">
     <span><i class="dot" style="background:var(--full)"></i>Día completo · 8,5 h</span>
-    <span><i class="dot" style="background:var(--part)"></i>Parcial / martes</span>
+    <span><i class="dot" style="background:var(--part)"></i>Parcial / martes y viernes</span>
     <span><i class="dot" style="background:var(--off)"></i>No disponible</span>
     <span><i class="dot" style="background:var(--dead)"></i>Navidad</span>
     <span><i class="dot" style="background:var(--final)"></i>Colchón final</span>
@@ -88,23 +93,20 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <section class="months" id="months"></section>
 
-  <section class="nextbox">
-    <h3>Próxima sesión disponible</h3>
-    <p id="nextSession">—</p>
-  </section>
-
   <div class="footer">Se actualiza automáticamente con la fecha del teléfono. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.</div>
 </main>
 
 <script>
 (() => {
+  const DISPLAY_START = '2026-09-23';
   const START = '2026-09-24';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 540.5;
+  const TOTAL_HOURS = 496.5;
   const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
   const special = {
+    '2026-09-23': {h:0,c:'off',t:'no contado'},
     '2026-09-24': {h:4.5,c:'part',t:'9:30–14:00'},
     '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
     '2026-09-29': {h:0,c:'off',t:'fuera'},
@@ -137,7 +139,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(special[s]) return special[s];
     const d=fromKey(s), dow=d.getDay();
     if(dow===6) return {h:0,c:'off',t:'francés'};
-    if(dow===2) return {h:4.5,c:'part',t:'9:30–14:00'};
+    if(dow===2 || dow===5) return {h:4.5,c:'part',t:'9:30–14:00'};
     if(s>='2027-01-11' && s<='2027-01-15') return {h:8.5,c:'final',t:s==='2027-01-15'?'ENTREGA · colchón':'colchón · 8,5 h'};
     return {h:8.5,c:'full',t:'8,5 h'};
   }
@@ -177,7 +179,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     const count=new Date(y,m+1,0).getDate();
     for(let n=1;n<=count;n++){
       const d=new Date(y,m,n,12,0,0,0), s=key(d), box=document.createElement('div');
-      if(s<START||s>END){ box.className='day blank';grid.appendChild(box);continue; }
+      if(s<DISPLAY_START||s>END){ box.className='day blank';grid.appendChild(box);continue; }
       const x=info(s);
       box.className=`day ${x.c}`;
       box.dataset.date=s;
@@ -208,7 +210,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     toggle.classList.toggle('active',on);
   });
   document.getElementById('jumpToday').addEventListener('click',()=>{
-    const el=document.querySelector('.day.today') || document.querySelector('.day.final');
+    let el=document.querySelector('.day.today');
+    if(!el && today < fromKey(DISPLAY_START)) el=document.querySelector('[data-date="'+DISPLAY_START+'"]');
+    if(!el && today > endDate) el=document.querySelector('[data-date="'+END+'"]');
     if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
   });
 })();
