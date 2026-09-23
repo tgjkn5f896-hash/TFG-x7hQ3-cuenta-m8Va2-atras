@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="TFG">
+<title>Calendario TFG</title>
+<style>
+:root{
+  --bg:#f6f4ef; --panel:#ffffff; --text:#252525; --muted:#6d6d6d; --border:#d8d5cf;
+  --full:#e6efe7; --part:#f3d8a8; --off:#e7e7e7; --dead:#ece2df; --final:#dfe8f1;
+  --today:#252525; --past-opacity:.32;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:980px;margin:0 auto;padding:18px 14px 36px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+.big{font-weight:750;font-size:26px;line-height:1.05}
+.small{font-size:12px;color:var(--muted);margin-top:5px}
+.progress-wrap{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:13px 14px;margin-bottom:14px}
+.progress-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;margin-bottom:8px}
+.bar{height:9px;background:#e3e0da;border-radius:999px;overflow:hidden}
+.bar>span{display:block;height:100%;background:#8b8b8b;width:0}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+button{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:999px;padding:9px 12px;font-size:13px}
+button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
+.legend{display:flex;flex-wrap:wrap;gap:7px 12px;font-size:12px;color:var(--muted);margin:4px 0 14px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;border:1px solid var(--border);vertical-align:-1px;margin-right:4px}
+.months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.month{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px;min-width:0}
+.month h2{font-size:16px;margin:0 0 9px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dow{text-align:center;font-size:10px;color:var(--muted);padding:2px 0}
+.day{min-height:56px;border:1px solid var(--border);border-radius:8px;padding:5px;display:flex;flex-direction:column;justify-content:space-between;min-width:0;position:relative}
+.blank{border-color:transparent;background:transparent}
+.num{font-size:12px;font-weight:700}
+.tag{font-size:9px;line-height:1.05;color:#5f5f5f;overflow-wrap:anywhere}
+.full{background:var(--full)} .part{background:var(--part)} .off{background:var(--off)} .dead{background:var(--dead)} .final{background:var(--final)}
+.past{opacity:var(--past-opacity)}
+.today{outline:3px solid var(--today);outline-offset:1px}
+.today:after{content:"HOY";position:absolute;right:4px;top:4px;font-size:7px;font-weight:800;letter-spacing:.04em}
+.hidden-past .day.past{visibility:hidden}
+.nextbox{margin-top:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+.nextbox h3{font-size:14px;margin:0 0 6px}
+.nextbox p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
+.footer{font-size:11px;color:var(--muted);margin-top:14px}
+@media(max-width:700px){
+  .cards{grid-template-columns:1fr}
+  .months{grid-template-columns:1fr}
+  .day{min-height:50px}
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>TFG · cuenta atrás real</h1>
+  <div class="sub" id="todayText"></div>
+
+  <section class="cards">
+    <div class="card"><div class="big" id="hoursLeft">—</div><div class="small">horas útiles que quedan</div></div>
+    <div class="card"><div class="big" id="daysLeft">—</div><div class="small">días equivalentes de 8,5 h</div></div>
+    <div class="card"><div class="big" id="calendarDays">—</div><div class="small">días naturales hasta la entrega</div></div>
+  </section>
+
+  <section class="progress-wrap">
+    <div class="progress-row"><span>Ventana de trabajo consumida</span><strong id="progressText">—</strong></div>
+    <div class="bar"><span id="barFill"></span></div>
+  </section>
+
+  <div class="controls">
+    <button id="togglePast" type="button">Ocultar días pasados</button>
+    <button id="jumpToday" type="button">Ir a hoy</button>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:var(--full)"></i>Día completo · 8,5 h</span>
+    <span><i class="dot" style="background:var(--part)"></i>Parcial / martes</span>
+    <span><i class="dot" style="background:var(--off)"></i>No disponible</span>
+    <span><i class="dot" style="background:var(--dead)"></i>Navidad</span>
+    <span><i class="dot" style="background:var(--final)"></i>Colchón final</span>
+  </div>
+
+  <section class="months" id="months"></section>
+
+  <section class="nextbox">
+    <h3>Próxima sesión disponible</h3>
+    <p id="nextSession">—</p>
+  </section>
+
+  <div class="footer">Se actualiza automáticamente con la fecha del teléfono. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.</div>
+</main>
+
+<script>
+(() => {
+  const START = '2026-09-24';
+  const END = '2027-01-15';
+  const TOTAL_HOURS = 540.5;
+  const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+  const special = {
+    '2026-09-24': {h:4.5,c:'part',t:'9:30–14:00'},
+    '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
+    '2026-09-29': {h:0,c:'off',t:'fuera'},
+    '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
+    '2026-10-04': {h:0,c:'off',t:'fuera'},
+    '2026-10-17': {h:4,c:'part',t:'16:00–20:00'},
+    '2026-10-30': {h:0,c:'off',t:'fuera (surf)'},
+    '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
+    '2026-11-01': {h:0,c:'off',t:'fuera (surf)'},
+    '2026-11-08': {h:0,c:'off',t:'fuera (NFL)'},
+    '2026-11-12': {h:3.5,c:'part',t:'9:30–13:00'},
+    '2026-11-26': {h:3.5,c:'part',t:'9:30–13:00 (Thanksgiving)'},
+    '2026-11-27': {h:0,c:'off',t:'fuera'},
+    '2026-12-10': {h:3.5,c:'part',t:'9:30–13:00'}
+  };
+
+  const pad = n => String(n).padStart(2,'0');
+  const key = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const fromKey = s => {
+    const [y,m,d]=s.split('-').map(Number);
+    return new Date(y,m-1,d,12,0,0,0);
+  };
+  const startDate = fromKey(START), endDate = fromKey(END);
+  const todayRaw = new Date();
+  const today = new Date(todayRaw.getFullYear(), todayRaw.getMonth(), todayRaw.getDate(),12,0,0,0);
+  const todayKey = key(today);
+
+  function info(s){
+    if(s >= '2026-12-18' && s <= '2027-01-10') return {h:0,c:'dead',t:s==='2027-01-10'?'último día muerto':'Navidad'};
+    if(special[s]) return special[s];
+    const d=fromKey(s), dow=d.getDay();
+    if(dow===6) return {h:0,c:'off',t:'francés'};
+    if(dow===2) return {h:4.5,c:'part',t:'9:30–14:00'};
+    if(s>='2027-01-11' && s<='2027-01-15') return {h:8.5,c:'final',t:s==='2027-01-15'?'ENTREGA · colchón':'colchón · 8,5 h'};
+    return {h:8.5,c:'full',t:'8,5 h'};
+  }
+
+  function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+
+  function remainingHours(){
+    if(today > endDate) return 0;
+    let d = today < startDate ? startDate : today;
+    let total=0;
+    for(; d<=endDate; d=addDays(d,1)) total += info(key(d)).h;
+    return total;
+  }
+
+  const left = remainingHours();
+  const calDays = today > endDate ? 0 : Math.max(0, Math.ceil((endDate - today)/86400000));
+  const consumed = Math.max(0, Math.min(TOTAL_HOURS, TOTAL_HOURS-left));
+  const pct = TOTAL_HOURS ? Math.round(consumed/TOTAL_HOURS*100) : 100;
+
+  document.getElementById('todayText').textContent =
+    `Hoy: ${weekdayLong[today.getDay()]} ${today.getDate()} de ${monthNames[today.getMonth()].toLowerCase()} de ${today.getFullYear()}`;
+  document.getElementById('hoursLeft').textContent = `${String(left).replace('.',',')} h`;
+  document.getElementById('daysLeft').textContent = (left/8.5).toFixed(1).replace('.',',');
+  document.getElementById('calendarDays').textContent = calDays;
+  document.getElementById('progressText').textContent = `${pct}%`;
+  document.getElementById('barFill').style.width = `${pct}%`;
+
+  const months = [[2026,8],[2026,9],[2026,10],[2026,11],[2027,0]];
+  const holder = document.getElementById('months');
+  months.forEach(([y,m])=>{
+    const sec=document.createElement('section'); sec.className='month'; sec.dataset.month=`${y}-${pad(m+1)}`;
+    const h=document.createElement('h2'); h.textContent=`${monthNames[m]} ${y}`; sec.appendChild(h);
+    const grid=document.createElement('div'); grid.className='grid';
+    ['L','M','X','J','V','S','D'].forEach(x=>{ const e=document.createElement('div');e.className='dow';e.textContent=x;grid.appendChild(e); });
+    let first=(new Date(y,m,1).getDay()+6)%7;
+    for(let i=0;i<first;i++){ const b=document.createElement('div');b.className='day blank';grid.appendChild(b); }
+    const count=new Date(y,m+1,0).getDate();
+    for(let n=1;n<=count;n++){
+      const d=new Date(y,m,n,12,0,0,0), s=key(d), box=document.createElement('div');
+      if(s<START||s>END){ box.className='day blank';grid.appendChild(box);continue; }
+      const x=info(s);
+      box.className=`day ${x.c}`;
+      box.dataset.date=s;
+      if(d<today) box.classList.add('past');
+      if(s===todayKey) box.classList.add('today');
+      const num=document.createElement('span'); num.className='num'; num.textContent=n;
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=x.t;
+      box.append(num,tag); grid.appendChild(box);
+    }
+    sec.appendChild(grid);holder.appendChild(sec);
+  });
+
+  let next = today < startDate ? startDate : today;
+  let found=null;
+  for(; next<=endDate; next=addDays(next,1)){
+    const x=info(key(next));
+    if(x.h>0){found={d:new Date(next),x};break;}
+  }
+  document.getElementById('nextSession').textContent = found
+    ? `${weekdayLong[found.d.getDay()]} ${found.d.getDate()} de ${monthNames[found.d.getMonth()].toLowerCase()}: ${found.x.t} (${String(found.x.h).replace('.',',')} h).`
+    : 'No quedan sesiones planificadas antes de la entrega.';
+
+  const toggle=document.getElementById('togglePast');
+  toggle.addEventListener('click',()=>{
+    document.body.classList.toggle('hidden-past');
+    const on=document.body.classList.contains('hidden-past');
+    toggle.textContent=on?'Mostrar días pasados':'Ocultar días pasados';
+    toggle.classList.toggle('active',on);
+  });
+  document.getElementById('jumpToday').addEventListener('click',()=>{
+    const el=document.querySelector('.day.today') || document.querySelector('.day.final');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+})();
+</script>
+</body>
+</html>
