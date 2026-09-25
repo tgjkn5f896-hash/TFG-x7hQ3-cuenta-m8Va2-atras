@@ -92,9 +92,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   appearance:none;
 }
 .savebtn{min-height:42px;border-radius:10px;padding:8px 15px;background:#2d2d2d;color:#fff;border-color:#2d2d2d;font-weight:650}
-.planhint{font-size:11px;color:var(--muted);margin:7px 0 0}
-.trackmsg{font-size:11px;min-height:15px;margin:5px 0 0;color:var(--muted)}
-.performance-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.planhint{font-size:11px;color:var(--muted);margin:6px 0 0}
+.trackmsg{font-size:11px;margin:3px 0 0;color:var(--muted)}
+.trackmsg:empty{display:none}
+.performance-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 .stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px}
 .stat strong{display:block;font-size:19px;line-height:1.05}
 .stat span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
@@ -206,8 +207,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <section class="performance" id="performanceSection" aria-labelledby="perfTitle">
     <h3 id="perfTitle">Rendimiento real</h3>
-    <p class="performance-intro">Registra las horas que realmente trabajaste. La comparación usa solo los días que hayas registrado.</p>
-    <form id="hoursForm" class="tracker-form">
+        <form id="hoursForm" class="tracker-form">
       <div class="field">
         <label for="workDate">Día</label>
         <input id="workDate" type="date" min="2026-09-25" max="2027-01-15" required>
@@ -219,8 +219,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
       <button class="savebtn" type="submit">Guardar</button>
     </form>
     <div id="planHint" class="planhint">Plan de ese día: —</div>
-    <div class="planhint">Puedes guardar o corregir las horas en cualquier momento; no hace falta esperar a que termine la sesión.</div>
-    <div id="trackMsg" class="trackmsg" aria-live="polite"></div>
+        <div id="trackMsg" class="trackmsg" aria-live="polite"></div>
 
     <div class="performance-stats">
       <div class="stat"><strong id="actualTotal">0 h</strong><span>horas reales registradas</span></div>
@@ -458,7 +457,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
     const list=document.getElementById('logList'); list.innerHTML='';
     if(!manualKeys.length){
-      const empty=document.createElement('div'); empty.className='empty-log'; empty.textContent='Todavía no has registrado ninguna sesión. Las horas planificadas de cada día aparecen desde el inicio como pendientes; se vuelven verdes a medida que registras trabajo.'; list.appendChild(empty);
+      const empty=document.createElement('div'); empty.className='empty-log'; empty.textContent='Todavía no has registrado ninguna sesión.'; list.appendChild(empty);
       return;
     }
     [...manualKeys].reverse().forEach(s=>{
