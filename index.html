@@ -100,7 +100,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .stat strong{display:block;font-size:19px;line-height:1.05}
 .stat span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
 .eff-wrap{margin-top:9px}
-.eff-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:6px}
+.eff-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:6px;align-items:flex-start}
+.eff-title{display:block}
+#effBarText{white-space:nowrap}
 .effbar{display:flex;height:12px;background:#e3e0da;border-radius:999px;overflow:hidden}
 .eff-used{
   height:100%;width:0;
@@ -147,10 +149,21 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   .savebtn{grid-column:1/-1}
   .performance-stats{grid-template-columns:1fr 1fr 1fr}
 }
+@media(max-width:520px){
+  .eff-head{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:4px;
+    font-size:11px;
+  }
+  .eff-title{white-space:nowrap}
+  #effBarText{justify-self:end}
+}
 @media(max-width:420px){
   .tracker-form{grid-template-columns:1fr}
   .savebtn{grid-column:auto}
   .performance-stats{grid-template-columns:1fr}
+  .eff-head{font-size:10.5px}
 }
 </style>
 </head>
@@ -172,7 +185,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <section class="performance-top" aria-label="Aprovechamiento real">
     <div class="eff-wrap">
-      <div class="eff-head"><span>Aprovechamiento de las horas planificadas</span><strong id="effBarText">Sin registros</strong></div>
+      <div class="eff-head"><span class="eff-title">Aprovechamiento de las horas planificadas</span><strong id="effBarText">Sin registros</strong></div>
       <div class="effbar" aria-label="Horas aprovechadas frente a horas no utilizadas">
         <span id="effUsed" class="eff-used"></span><span id="effLost" class="eff-lost"></span>
       </div>
