@@ -46,14 +46,94 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .today{outline:3px solid var(--today);outline-offset:1px}
 .today:after{content:"HOY";position:absolute;right:4px;top:4px;font-size:7px;font-weight:800;letter-spacing:.04em}
 .hidden-past .day.past{visibility:hidden}
+.worked-star{
+  position:absolute;
+  top:18px;
+  right:7px;
+  width:17px;
+  height:17px;
+  pointer-events:none;
+  z-index:2;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 56%,79% 94%,50% 72%,21% 94%,32% 56%,2% 35%,39% 35%);
+  background:
+    radial-gradient(circle at 27% 30%,rgba(255,255,255,.82) 0 1.3px,transparent 2px),
+    radial-gradient(circle at 69% 24%,rgba(246,252,239,.78) 0 1.1px,transparent 1.8px),
+    radial-gradient(circle at 73% 68%,rgba(255,255,255,.74) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 35% 73%,rgba(238,249,229,.78) 0 1.2px,transparent 2px),
+    linear-gradient(135deg,#c6dfb5 0%,#a4cb8d 35%,#cbe2bd 62%,#94bd7d 100%);
+  filter:drop-shadow(0 0 .6px rgba(65,92,57,.55)) drop-shadow(0 1px 1px rgba(44,63,39,.20));
+}
+@media(max-width:700px){.worked-star{width:15px;height:15px;top:17px;right:6px}}
 .nextbox{margin-top:14px;margin-bottom:18px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
 .nextbox h3{font-size:14px;margin:0 0 6px}
 .nextbox p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
+.performance{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:16px;margin-bottom:18px}
+.performance-top{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin-bottom:14px}
+.performance-top .eff-wrap{margin-top:0}
+.performance h3{font-size:15px;margin:0 0 4px}
+.performance-intro{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.35}
+.tracker-form{display:grid;grid-template-columns:minmax(145px,1fr) minmax(120px,.75fr) auto;gap:8px;align-items:end}
+.field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px}
+.field input{width:100%;min-height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
+.savebtn{min-height:42px;border-radius:10px;padding:8px 15px;background:#2d2d2d;color:#fff;border-color:#2d2d2d;font-weight:650}
+.planhint{font-size:11px;color:var(--muted);margin:7px 0 0}
+.trackmsg{font-size:11px;min-height:15px;margin:5px 0 0;color:var(--muted)}
+.performance-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px}
+.stat strong{display:block;font-size:19px;line-height:1.05}
+.stat span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+.eff-wrap{margin-top:9px}
+.eff-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:6px}
+.effbar{display:flex;height:12px;background:#e3e0da;border-radius:999px;overflow:hidden}
+.eff-used{
+  height:100%;width:0;
+  background:
+    radial-gradient(circle at 10% 28%,rgba(255,255,255,.72) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 24% 70%,rgba(246,252,239,.66) 0 1.2px,transparent 2px),
+    radial-gradient(circle at 42% 34%,rgba(255,255,255,.60) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 61% 76%,rgba(238,249,229,.68) 0 1.2px,transparent 2px),
+    radial-gradient(circle at 79% 31%,rgba(255,255,255,.66) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 91% 68%,rgba(242,251,234,.64) 0 1.2px,transparent 2px),
+    linear-gradient(90deg,#bfdcab 0%,#afd39a 42%,#c5dfb4 72%,#a8cc92 100%);
+  background-size:23px 17px,29px 19px,31px 21px,27px 18px,37px 23px,33px 20px,auto;
+}
+.eff-lost{
+  height:100%;width:0;
+  background:linear-gradient(90deg,#dc8a8d 0%,#d67d80 48%,#ce7377 100%);
+}
+.eff-legend{display:flex;flex-wrap:wrap;gap:5px 13px;color:var(--muted);font-size:10px;margin-top:5px}
+.eff-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.eff-legend .legend-used{
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 28% 28%,rgba(255,255,255,.72) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 68% 64%,rgba(245,251,239,.68) 0 1px,transparent 1.5px),
+    linear-gradient(135deg,#bdd9aa,#9fc58a);
+}
+.eff-legend .legend-lost{
+  border-radius:50%;
+  background:linear-gradient(135deg,#df8d90,#ce7377);
+}
+.extra-note{font-size:11px;color:var(--muted);margin-top:5px}.extra-note:empty{display:none}
+.log-title{font-size:11px;font-weight:700;margin:12px 0 5px}
+.log-list{display:grid;gap:5px}
+.log-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border-top:1px solid var(--border);padding-top:6px;font-size:11px}
+.log-meta{color:var(--muted)}
+.log-row button{padding:4px 8px;min-height:30px;font-size:10px}
+.empty-log{font-size:11px;color:var(--muted);padding-top:2px}
 .footer{font-size:11px;color:var(--muted);margin-top:14px}
 @media(max-width:700px){
   .cards{grid-template-columns:1fr}
   .months{grid-template-columns:1fr}
   .day{min-height:50px}
+  .tracker-form{grid-template-columns:1fr 1fr}
+  .savebtn{grid-column:1/-1}
+  .performance-stats{grid-template-columns:1fr 1fr 1fr}
+}
+@media(max-width:420px){
+  .tracker-form{grid-template-columns:1fr}
+  .savebtn{grid-column:auto}
+  .performance-stats{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -64,13 +144,27 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <section class="cards">
     <div class="card"><div class="big" id="hoursLeft">—</div><div class="small">horas útiles que quedan</div></div>
-    <div class="card"><div class="big" id="daysLeft">—</div><div class="small">días equivalentes de 8,5 h</div></div>
+    <div class="card"><div class="big" id="daysLeft">—</div><div class="small">días equivalentes de 7,5 h</div></div>
     <div class="card"><div class="big" id="calendarDays">—</div><div class="small">días naturales hasta la entrega</div></div>
   </section>
 
   <section class="progress-wrap">
     <div class="progress-row"><span>Ventana de trabajo consumida</span><strong id="progressText">—</strong></div>
     <div class="bar"><span id="barFill"></span></div>
+  </section>
+
+  <section class="performance-top" aria-label="Aprovechamiento real">
+    <div class="eff-wrap">
+      <div class="eff-head"><span>Aprovechamiento de las horas planificadas</span><strong id="effBarText">Sin registros</strong></div>
+      <div class="effbar" aria-label="Horas aprovechadas frente a horas no utilizadas">
+        <span id="effUsed" class="eff-used"></span><span id="effLost" class="eff-lost"></span>
+      </div>
+      <div class="eff-legend">
+        <span><i class="legend-used"></i><span id="usedLabel">Aprovechadas: 0 h</span></span>
+        <span><i class="legend-lost"></i><span id="lostLabel">No utilizadas: 0 h</span></span>
+      </div>
+      <div id="extraNote" class="extra-note"></div>
+    </div>
   </section>
 
   <section class="nextbox">
@@ -81,10 +175,11 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   <div class="controls">
     <button id="togglePast" type="button">Ocultar días pasados</button>
     <button id="jumpToday" type="button">Ir a hoy</button>
+    <button id="jumpPerformance" type="button">Ir a rendimiento</button>
   </div>
 
   <div class="legend">
-    <span><i class="dot" style="background:var(--full)"></i>Día completo · 8,5 h</span>
+    <span><i class="dot" style="background:var(--full)"></i>Día completo · 7,5 h</span>
     <span><i class="dot" style="background:var(--part)"></i>Parcial / martes y viernes</span>
     <span><i class="dot" style="background:var(--off)"></i>No disponible</span>
     <span><i class="dot" style="background:var(--dead)"></i>Navidad</span>
@@ -92,6 +187,34 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   </div>
 
   <section class="months" id="months"></section>
+
+  <section class="performance" id="performanceSection" aria-labelledby="perfTitle">
+    <h3 id="perfTitle">Rendimiento real</h3>
+    <p class="performance-intro">Registra las horas que realmente trabajaste. La comparación usa solo los días que hayas registrado.</p>
+    <form id="hoursForm" class="tracker-form">
+      <div class="field">
+        <label for="workDate">Día</label>
+        <input id="workDate" type="date" min="2026-09-25" max="2027-01-15" required>
+      </div>
+      <div class="field">
+        <label for="realHours">Horas reales</label>
+        <input id="realHours" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej. 3,5" required>
+      </div>
+      <button class="savebtn" type="submit">Guardar</button>
+    </form>
+    <div id="planHint" class="planhint">Plan de ese día: —</div>
+    <div class="planhint">Puedes guardar o corregir las horas en cualquier momento; no hace falta esperar a que termine la sesión.</div>
+    <div id="trackMsg" class="trackmsg" aria-live="polite"></div>
+
+    <div class="performance-stats">
+      <div class="stat"><strong id="actualTotal">0 h</strong><span>horas reales registradas</span></div>
+      <div class="stat"><strong id="plannedLogged">0 h</strong><span>horas planificadas hasta hoy</span></div>
+      <div class="stat"><strong id="efficiencyPct">—</strong><span>cumplimiento real</span></div>
+    </div>
+
+    <div class="log-title">Registros</div>
+    <div id="logList" class="log-list"></div>
+  </section>
 
   <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.</div>
 </main>
@@ -101,11 +224,12 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-25';
   const START = '2026-09-25';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 492;
+  const TOTAL_HOURS = 425;
   const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
   const special = {
+    '2026-09-26': {h:0,c:'off',t:'fuera'},
     '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
     '2026-09-29': {h:0,c:'off',t:'fuera'},
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
@@ -131,15 +255,31 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const todayRaw = new Date();
   const today = new Date(todayRaw.getFullYear(), todayRaw.getMonth(), todayRaw.getDate(),12,0,0,0);
   const todayKey = key(today);
+  const STORAGE_KEY = 'tfg_real_hours_v1';
+  let records = {};
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    records = saved ? JSON.parse(saved) : {};
+    if (!records || typeof records !== 'object' || Array.isArray(records)) records = {};
+  } catch (_) { records = {}; }
+
+  const fmtHours = n => {
+    const value = Math.round((Number(n) || 0) * 100) / 100;
+    return String(value).replace('.', ',');
+  };
+  function saveRecords(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); return true; }
+    catch (_) { return false; }
+  }
 
   function info(s){
     if(s >= '2026-12-18' && s <= '2027-01-10') return {h:0,c:'dead',t:s==='2027-01-10'?'último día muerto':'Navidad'};
     if(special[s]) return special[s];
     const d=fromKey(s), dow=d.getDay();
     if(dow===6) return {h:0,c:'off',t:'francés'};
-    if(dow===2 || dow===5) return {h:4.5,c:'part',t:'9:30–14:00'};
-    if(s>='2027-01-11' && s<='2027-01-15') return {h:8.5,c:'final',t:s==='2027-01-15'?'ENTREGA · colchón':'colchón · 8,5 h'};
-    return {h:8.5,c:'full',t:'8,5 h'};
+    if(dow===2 || dow===5) return {h:3.5,c:'part',t:'9:30–13:00'};
+    if(s>='2027-01-11' && s<='2027-01-15') return {h:7.5,c:'final',t:s==='2027-01-15'?'ENTREGA · colchón':'colchón · 7,5 h'};
+    return {h:7.5,c:'full',t:'7,5 h'};
   }
 
   function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
@@ -160,7 +300,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   document.getElementById('todayText').textContent =
     `Hoy: ${weekdayLong[today.getDay()]} ${today.getDate()} de ${monthNames[today.getMonth()].toLowerCase()} de ${today.getFullYear()}`;
   document.getElementById('hoursLeft').textContent = `${String(left).replace('.',',')} h`;
-  document.getElementById('daysLeft').textContent = (left/8.5).toFixed(1).replace('.',',');
+  document.getElementById('daysLeft').textContent = (left/7.5).toFixed(1).replace('.',',');
   document.getElementById('calendarDays').textContent = calDays;
   document.getElementById('progressText').textContent = `${pct}%`;
   document.getElementById('barFill').style.width = `${pct}%`;
@@ -185,7 +325,15 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
       if(s===todayKey) box.classList.add('today');
       const num=document.createElement('span'); num.className='num'; num.textContent=n;
       const tag=document.createElement('span'); tag.className='tag'; tag.textContent=x.t;
-      box.append(num,tag); grid.appendChild(box);
+      box.append(num,tag);
+      if((Number(records[s])||0)>0){
+        const star=document.createElement('span');
+        star.className='worked-star';
+        star.setAttribute('aria-label','Día trabajado');
+        star.title='Día trabajado';
+        box.appendChild(star);
+      }
+      grid.appendChild(box);
     }
     sec.appendChild(grid);holder.appendChild(sec);
   });
@@ -200,6 +348,135 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     ? `${weekdayLong[found.d.getDay()]} ${found.d.getDate()} de ${monthNames[found.d.getMonth()].toLowerCase()}: ${found.x.t} (${String(found.x.h).replace('.',',')} h).`
     : 'No quedan sesiones planificadas antes de la entrega.';
 
+  const workDate=document.getElementById('workDate');
+  const realHours=document.getElementById('realHours');
+  const planHint=document.getElementById('planHint');
+  const trackMsg=document.getElementById('trackMsg');
+  const hoursForm=document.getElementById('hoursForm');
+
+  const defaultDate = today < startDate ? START : (today > endDate ? END : todayKey);
+  workDate.value = defaultDate;
+
+  function updatePlanHint(){
+    const s=workDate.value;
+    if(!s){ planHint.textContent='Plan de ese día: —'; return; }
+    const planned=info(s).h;
+    planHint.textContent=`Plan de ese día: ${fmtHours(planned)} h`;
+    if(Object.prototype.hasOwnProperty.call(records,s)) realHours.value=records[s];
+    else realHours.value='';
+  }
+
+  function sessionEndMinutes(s){
+    const p=Math.max(0,info(s).h);
+    if(p<=0) return null;
+    if(s==='2026-10-17') return 20*60;
+    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60;
+    const dow=fromKey(s).getDay();
+    if(dow===2 || dow===5) return 13*60;
+    return 20*60;
+  }
+
+  function sessionIsClosed(s){
+    const d=fromKey(s);
+    if(d<today) return true;
+    if(d>today) return false;
+    const endM=sessionEndMinutes(s);
+    if(endM===null) return false;
+    const nowM=todayRaw.getHours()*60+todayRaw.getMinutes();
+    return nowM>=endM;
+  }
+
+  function syncWorkedStars(){
+    document.querySelectorAll('.day[data-date]').forEach(box=>{
+      const s=box.dataset.date;
+      const shouldShow=(Number(records[s])||0)>0;
+      let star=box.querySelector('.worked-star');
+      if(shouldShow && !star){
+        star=document.createElement('span');
+        star.className='worked-star';
+        star.setAttribute('aria-label','Día trabajado');
+        star.title='Día trabajado';
+        box.appendChild(star);
+      }else if(!shouldShow && star){
+        star.remove();
+      }
+    });
+  }
+
+  function renderPerformance(){
+    // Every planned session up to and including today is evaluated from the
+    // beginning of the day. Today's full planned hours start as red and turn
+    // green as real hours are registered.
+    const evaluated=[];
+    let d=fromKey(START);
+    const limit=today<endDate?today:endDate;
+    for(;d<=limit;d=addDays(d,1)){
+      const s=key(d);
+      if(info(s).h>0) evaluated.push(s);
+    }
+
+    // Any real hours entered up to today count as work done, even if that day
+    // was not originally planned. This allows extra sessions to recover red time.
+    const manualKeys=Object.keys(records).filter(s=>s>=START&&s<=key(limit)).sort();
+
+    let actual=0, planned=0;
+    evaluated.forEach(s=>{ planned+=Math.max(0,info(s).h); });
+    manualKeys.forEach(s=>{ actual+=Math.max(0,Number(records[s])||0); });
+
+    const used=Math.min(actual,planned);
+    const lost=Math.max(planned-actual,0);
+    const extra=Math.max(actual-planned,0);
+
+    document.getElementById('actualTotal').textContent=`${fmtHours(actual)} h`;
+    document.getElementById('plannedLogged').textContent=`${fmtHours(planned)} h`;
+    const pct=planned>0 ? actual/planned*100 : null;
+    document.getElementById('efficiencyPct').textContent=pct===null?'—':`${Math.round(pct)}%`;
+    const usedPct=planned>0 ? Math.min(100,used/planned*100) : 0;
+    const lostPct=planned>0 ? Math.min(100,lost/planned*100) : 0;
+    document.getElementById('effUsed').style.width=`${usedPct}%`;
+    document.getElementById('effLost').style.width=`${lostPct}%`;
+    document.getElementById('usedLabel').textContent=`Aprovechadas: ${fmtHours(used)} h`;
+    document.getElementById('lostLabel').textContent=`No utilizadas: ${fmtHours(lost)} h`;
+    document.getElementById('effBarText').textContent=planned>0?`${Math.round(Math.min(actual,planned)/planned*100)}% aprovechado`:'Sin horas planificadas todavía';
+    document.getElementById('extraNote').textContent=extra>0?`Vas por delante: +${fmtHours(extra)} h por encima de las horas planificadas hasta hoy.`:'';
+
+    const list=document.getElementById('logList'); list.innerHTML='';
+    if(!manualKeys.length){
+      const empty=document.createElement('div'); empty.className='empty-log'; empty.textContent='Todavía no has registrado ninguna sesión. Las horas planificadas de cada día aparecen desde el inicio como pendientes; se vuelven verdes a medida que registras trabajo.'; list.appendChild(empty);
+      return;
+    }
+    [...manualKeys].reverse().forEach(s=>{
+      const d=fromKey(s), p=info(s).h, a=Number(records[s])||0;
+      const row=document.createElement('div'); row.className='log-row';
+      const left=document.createElement('div');
+      left.innerHTML=`<strong>${weekdayLong[d.getDay()]} ${d.getDate()} ${monthNames[d.getMonth()].slice(0,3).toLowerCase()}</strong><div class="log-meta">real ${fmtHours(a)} h · plan ${fmtHours(p)} h</div>`;
+      const diff=document.createElement('div'); diff.className='log-meta';
+      const delta=a-p; diff.textContent=delta===0?'exacto':(delta>0?`+${fmtHours(delta)} h`:`−${fmtHours(Math.abs(delta))} h`);
+      const del=document.createElement('button'); del.type='button'; del.textContent='Eliminar'; del.dataset.delete=s;
+      row.append(left,diff,del); list.appendChild(row);
+    });
+  }
+
+  workDate.addEventListener('change',updatePlanHint);
+  hoursForm.addEventListener('submit',e=>{
+    e.preventDefault();
+    const s=workDate.value, raw=String(realHours.value).replace(',','.');
+    const clean=raw.trim().replace(/\s/g,'').replace(',','.');
+    const h=Number(clean);
+    if(!s || s<START || s>END){ trackMsg.textContent='Elige una fecha dentro del calendario del TFG.'; return; }
+    if(!Number.isFinite(h) || h<0 || h>16){ trackMsg.textContent='Introduce un número de horas entre 0 y 16.'; return; }
+    records[s]=Math.round(h*100)/100;
+    const persisted=saveRecords();
+    renderPerformance(); syncWorkedStars(); updatePlanHint();
+    trackMsg.textContent=persisted?'Registro guardado.':'Registro guardado en esta sesión, pero el navegador no permitió almacenamiento permanente.';
+  });
+  document.getElementById('logList').addEventListener('click',e=>{
+    const btn=e.target.closest('button[data-delete]'); if(!btn)return;
+    delete records[btn.dataset.delete]; saveRecords(); renderPerformance(); syncWorkedStars(); updatePlanHint();
+    trackMsg.textContent='Registro eliminado.';
+  });
+  updatePlanHint(); renderPerformance(); syncWorkedStars();
+
   const toggle=document.getElementById('togglePast');
   toggle.addEventListener('click',()=>{
     document.body.classList.toggle('hidden-past');
@@ -212,6 +489,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(!el && today < fromKey(DISPLAY_START)) el=document.querySelector('[data-date="'+DISPLAY_START+'"]');
     if(!el && today > endDate) el=document.querySelector('[data-date="'+END+'"]');
     if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.getElementById('jumpPerformance').addEventListener('click',()=>{
+    const el=document.getElementById('performanceSection');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
   });
 })();
 </script>
