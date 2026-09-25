@@ -46,7 +46,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .today{outline:3px solid var(--today);outline-offset:1px}
 .today:after{content:"HOY";position:absolute;right:4px;top:4px;font-size:7px;font-weight:800;letter-spacing:.04em}
 .hidden-past .day.past{visibility:hidden}
-.nextbox{margin-top:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+.nextbox{margin-top:14px;margin-bottom:18px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
 .nextbox h3{font-size:14px;margin:0 0 6px}
 .nextbox p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
 .footer{font-size:11px;color:var(--muted);margin-top:14px}
@@ -93,21 +93,19 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <section class="months" id="months"></section>
 
-  <div class="footer">Se actualiza automáticamente con la fecha del teléfono. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.</div>
+  <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.</div>
 </main>
 
 <script>
 (() => {
-  const DISPLAY_START = '2026-09-23';
-  const START = '2026-09-24';
+  const DISPLAY_START = '2026-09-25';
+  const START = '2026-09-25';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 496.5;
+  const TOTAL_HOURS = 492;
   const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
   const special = {
-    '2026-09-23': {h:0,c:'off',t:'no contado'},
-    '2026-09-24': {h:4.5,c:'part',t:'9:30–14:00'},
     '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
     '2026-09-29': {h:0,c:'off',t:'fuera'},
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
