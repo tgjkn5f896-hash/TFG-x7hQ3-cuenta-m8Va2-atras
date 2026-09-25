@@ -73,8 +73,24 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .performance h3{font-size:15px;margin:0 0 4px}
 .performance-intro{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.35}
 .tracker-form{display:grid;grid-template-columns:minmax(145px,1fr) minmax(120px,.75fr) auto;gap:8px;align-items:end}
+.tracker-form > *{min-width:0}
+.field{min-width:0}
 .field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px}
-.field input{width:100%;min-height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
+.field input{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-height:42px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  padding:8px 10px;
+  font:inherit;
+  font-size:16px;
+  -webkit-appearance:none;
+  appearance:none;
+}
 .savebtn{min-height:42px;border-radius:10px;padding:8px 15px;background:#2d2d2d;color:#fff;border-color:#2d2d2d;font-weight:650}
 .planhint{font-size:11px;color:var(--muted);margin:7px 0 0}
 .trackmsg{font-size:11px;min-height:15px;margin:5px 0 0;color:var(--muted)}
