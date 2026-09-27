@@ -140,6 +140,33 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .log-meta{color:var(--muted)}
 .log-row button{padding:4px 8px;min-height:30px;font-size:10px}
 .empty-log{font-size:11px;color:var(--muted);padding-top:2px}
+.ects-section{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  margin-top:0;
+  margin-bottom:18px;
+}
+.ects-section h3{font-size:15px;margin:0 0 4px}
+.ects-sub{font-size:11px;color:var(--muted);margin:0 0 10px}
+.ects-main{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:8px}
+.ects-value{font-size:24px;font-weight:750;line-height:1}
+.ects-hours{font-size:11px;color:var(--muted);text-align:right;white-space:nowrap}
+.ects-bar{height:12px;background:#e3e0da;border-radius:999px;overflow:hidden}
+.ects-bar span{
+  display:block;
+  height:100%;
+  width:0;
+  background:
+    radial-gradient(circle at 10% 28%,rgba(255,255,255,.72) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 24% 70%,rgba(246,252,239,.66) 0 1.2px,transparent 2px),
+    radial-gradient(circle at 42% 34%,rgba(255,255,255,.60) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 61% 76%,rgba(238,249,229,.68) 0 1.2px,transparent 2px),
+    linear-gradient(90deg,#bfdcab 0%,#afd39a 42%,#c5dfb4 72%,#a8cc92 100%);
+  background-size:23px 17px,29px 19px,31px 21px,27px 18px,auto;
+}
+.ects-foot{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);margin-top:5px}
 .footer{font-size:11px;color:var(--muted);margin-top:14px}
 .backup-tools{margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
 .backup-tools h3{font-size:13px;margin:0 0 8px}
@@ -241,6 +268,22 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     <div id="logList" class="log-list"></div>
   </section>
 
+  <section class="ects-section" aria-labelledby="ectsTitle">
+    <h3 id="ectsTitle">Créditos ECTS trabajados</h3>
+    <p class="ects-sub">Equivalencia usada: 1 ECTS = 27 h · 12 ECTS = 324 h.</p>
+    <div class="ects-main">
+      <div class="ects-value" id="ectsValue">0 / 12</div>
+      <div class="ects-hours" id="ectsHours">0 / 324 h</div>
+    </div>
+    <div class="ects-bar" aria-label="Progreso de créditos ECTS">
+      <span id="ectsBarFill"></span>
+    </div>
+    <div class="ects-foot">
+      <span id="ectsPct">0% completado</span>
+      <span id="ectsRemaining">Faltan 12 ECTS</span>
+    </div>
+  </section>
+
   <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.<br>Día completo: 7,5 h (9:30–13:00 y 16:00–20:00).<br>Día parcial: 3,5 h (9:30–13:00).</div>
 
   <section class="backup-tools" aria-label="Copia de seguridad">
@@ -259,7 +302,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 426;
+  const TOTAL_HOURS = 419;
+  const ECTS_TOTAL = 12;
+  const HOURS_PER_ECTS = 27;
+  const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
   const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
@@ -271,7 +317,11 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
     '2026-10-04': {h:0,c:'off',t:'fuera'},
     '2026-10-06': {h:4,c:'part',t:'4 h'},
+    '2026-10-09': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-10-11': {h:0,c:'off',t:'fuera'},
     '2026-10-17': {h:4,c:'part',t:'4 h'},
+    '2026-10-23': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-10-25': {h:0,c:'off',t:'fuera (Granja)'},
     '2026-10-30': {h:0,c:'off',t:'fuera (surf)'},
     '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-01': {h:0,c:'off',t:'fuera (surf)'},
@@ -321,7 +371,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   function sessionSchedule(s){
     if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-17') return '16:00–20:00';
-    if(s==='2026-09-29') return '9:30–13:00 y 16:00–20:00';
+    if(s==='2026-09-29' || s==='2026-10-09' || s==='2026-10-23') return '9:30–13:00 y 16:00–20:00';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:00';
     const d=fromKey(s), dow=d.getDay();
     if(dow===2 || dow===5) return '9:30–13:00';
@@ -415,7 +465,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionEndMinutes(s){
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
-    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-17') return 20*60;
+    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-09' || s==='2026-10-17' || s==='2026-10-23') return 20*60;
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60;
     const dow=fromKey(s).getDay();
     if(dow===2 || dow===5) return 13*60;
@@ -485,6 +535,19 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     document.getElementById('lostLabel').textContent=`No utilizadas: ${fmtHours(lost)} h`;
     document.getElementById('effBarText').textContent=planned>0?`${Math.round(Math.min(actual,planned)/planned*100)}% aprovechado`:'Sin horas planificadas todavía';
     document.getElementById('extraNote').textContent=extra>0?`Vas por delante: +${fmtHours(extra)} h por encima de las horas planificadas hasta hoy.`:'';
+
+    // Créditos ECTS equivalentes a las horas reales registradas hasta hoy.
+    const ectsRaw=actual/HOURS_PER_ECTS;
+    const ectsDone=Math.min(ECTS_TOTAL,ectsRaw);
+    const ectsPct=Math.min(100,(actual/ECTS_TOTAL_HOURS)*100);
+    const ectsRemaining=Math.max(0,ECTS_TOTAL-ectsDone);
+    document.getElementById('ectsValue').textContent=`${fmtHours(ectsDone)} / ${ECTS_TOTAL}`;
+    document.getElementById('ectsHours').textContent=`${fmtHours(actual)} / ${ECTS_TOTAL_HOURS} h`;
+    document.getElementById('ectsBarFill').style.width=`${ectsPct}%`;
+    document.getElementById('ectsPct').textContent=`${Math.round(ectsPct)}% completado`;
+    document.getElementById('ectsRemaining').textContent=ectsRemaining>0
+      ? `Faltan ${fmtHours(ectsRemaining)} ECTS`
+      : '12 ECTS completados';
 
     const list=document.getElementById('logList'); list.innerHTML='';
     if(!manualKeys.length){
