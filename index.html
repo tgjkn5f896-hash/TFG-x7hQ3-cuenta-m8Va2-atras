@@ -40,7 +40,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .day{min-height:56px;border:1px solid var(--border);border-radius:8px;padding:5px;display:flex;flex-direction:column;justify-content:space-between;min-width:0;position:relative}
 .blank{border-color:transparent;background:transparent}
 .num{font-size:12px;font-weight:700}
-.tag{font-size:9px;line-height:1.05;color:#5f5f5f;overflow-wrap:anywhere}
+.tag{font-size:8px;line-height:1.05;color:#5f5f5f;overflow-wrap:anywhere}
 .full{background:var(--full)} .part{background:var(--part)} .off{background:var(--off)} .dead{background:var(--dead)} .final{background:var(--final)}
 .past{opacity:var(--past-opacity)}
 .today{outline:3px solid var(--today);outline-offset:1px}
@@ -152,6 +152,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   .cards{grid-template-columns:1fr}
   .months{grid-template-columns:1fr}
   .day{min-height:50px}
+  .tag{font-size:7.4px}
   .tracker-form{grid-template-columns:1fr 1fr}
   .savebtn{grid-column:1/-1}
   .performance-stats{grid-template-columns:1fr 1fr 1fr}
@@ -219,7 +220,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
         <form id="hoursForm" class="tracker-form">
       <div class="field">
         <label for="workDate">Día</label>
-        <input id="workDate" type="date" min="2026-09-25" max="2027-01-15" required>
+        <input id="workDate" type="date" min="2026-09-26" max="2027-01-15" required>
       </div>
       <div class="field">
         <label for="realHours">Horas reales</label>
@@ -240,7 +241,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     <div id="logList" class="log-list"></div>
   </section>
 
-  <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero. Día completo: 7,5 h (9:30–13:00 y 16:00–20:00). Día parcial: 3,5 h (9:30–13:00).</div>
+  <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.<br>Día completo: 7,5 h (9:30–13:00 y 16:00–20:00).<br>Día parcial: 3,5 h (9:30–13:00).</div>
 
   <section class="backup-tools" aria-label="Copia de seguridad">
     <h3>Copia de seguridad</h3>
@@ -255,19 +256,21 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
 <script>
 (() => {
-  const DISPLAY_START = '2026-09-25';
-  const START = '2026-09-25';
+  const DISPLAY_START = '2026-09-26';
+  const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 425;
+  const TOTAL_HOURS = 426;
   const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const weekdayLong = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
   const special = {
     '2026-09-26': {h:0,c:'off',t:'fuera'},
     '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
-    '2026-09-29': {h:0,c:'off',t:'fuera'},
+    '2026-09-29': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-09-30': {h:4,c:'part',t:'4 h'},
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
     '2026-10-04': {h:0,c:'off',t:'fuera'},
+    '2026-10-06': {h:4,c:'part',t:'4 h'},
     '2026-10-17': {h:4,c:'part',t:'4 h'},
     '2026-10-30': {h:0,c:'off',t:'fuera (surf)'},
     '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
@@ -317,7 +320,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   }
 
   function sessionSchedule(s){
-    if(s==='2026-10-17') return '16:00–20:00';
+    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-17') return '16:00–20:00';
+    if(s==='2026-09-29') return '9:30–13:00 y 16:00–20:00';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:00';
     const d=fromKey(s), dow=d.getDay();
     if(dow===2 || dow===5) return '9:30–13:00';
@@ -411,7 +415,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionEndMinutes(s){
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
-    if(s==='2026-10-17') return 20*60;
+    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-17') return 20*60;
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60;
     const dow=fromKey(s).getDay();
     if(dow===2 || dow===5) return 13*60;
