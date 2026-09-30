@@ -302,7 +302,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 419;
+  const TOTAL_HOURS = 417;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -312,11 +312,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const special = {
     '2026-09-26': {h:0,c:'off',t:'fuera'},
     '2026-09-28': {h:0,c:'off',t:'fuera (Rawayana)'},
-    '2026-09-29': {h:7.5,c:'full',t:'7,5 h'},
-    '2026-09-30': {h:4,c:'part',t:'4 h'},
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
     '2026-10-04': {h:0,c:'off',t:'fuera'},
-    '2026-10-06': {h:4,c:'part',t:'4 h'},
+    '2026-10-05': {h:6.5,c:'part',t:'6,5 h'},
     '2026-10-09': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-11': {h:0,c:'off',t:'fuera'},
     '2026-10-17': {h:4,c:'part',t:'4 h'},
@@ -370,8 +368,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   }
 
   function sessionSchedule(s){
-    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-17') return '16:00–20:00';
-    if(s==='2026-09-29' || s==='2026-10-09' || s==='2026-10-23') return '9:30–13:00 y 16:00–20:00';
+    if(s==='2026-10-05') return '10:30–13:00 y 16:00–20:00';
+    if(s==='2026-10-17') return '16:00–20:00';
+    if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:00 y 16:00–20:00';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:00';
     const d=fromKey(s), dow=d.getDay();
     if(dow===2 || dow===5) return '9:30–13:00';
@@ -465,7 +464,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionEndMinutes(s){
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
-    if(s==='2026-09-30' || s==='2026-10-06' || s==='2026-10-09' || s==='2026-10-17' || s==='2026-10-23') return 20*60;
+    if(s==='2026-10-05') return 20*60;
+    if(s==='2026-10-09' || s==='2026-10-17' || s==='2026-10-23') return 20*60;
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60;
     const dow=fromKey(s).getDay();
     if(dow===2 || dow===5) return 13*60;
