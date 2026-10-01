@@ -234,7 +234,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   <div class="legend">
     <span><i class="dot" style="background:var(--full)"></i>Día completo · 7,5 h</span>
-    <span><i class="dot" style="background:var(--part)"></i>Día parcial · 3,5 h</span>
+    <span><i class="dot" style="background:var(--part)"></i>Día parcial habitual · 4 h</span>
     <span><i class="dot" style="background:var(--off)"></i>No disponible</span>
     <span><i class="dot" style="background:var(--dead)"></i>Navidad</span>
     <span><i class="dot" style="background:var(--final)"></i>Colchón final</span>
@@ -284,7 +284,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     </div>
   </section>
 
-  <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.<br>Día completo: 7,5 h (9:30–13:00 y 16:00–20:00).<br>Día parcial: 3,5 h (9:30–13:00).</div>
+  <div class="footer">Se actualiza automáticamente con la fecha. Entrega: 15 de enero de 2027. Bloque navideño: 18 de diciembre–10 de enero.<br>Desde el 2 de octubre — Día completo: 7,5 h (9:30–13:30 y 16:00–19:30).<br>Día parcial habitual: 4 h (9:30–13:30).</div>
 
   <section class="backup-tools" aria-label="Copia de seguridad">
     <h3>Copia de seguridad</h3>
@@ -302,7 +302,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 417;
+  const TOTAL_HOURS = 428.5;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -324,10 +324,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-01': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-08': {h:0,c:'off',t:'fuera (NFL)'},
-    '2026-11-12': {h:3.5,c:'part',t:'3,5 h'},
-    '2026-11-26': {h:3.5,c:'part',t:'3,5 h (Thanksgiving)'},
+    '2026-11-12': {h:4,c:'part',t:'4 h'},
+    '2026-11-26': {h:4,c:'part',t:'4 h (Thanksgiving)'},
     '2026-11-27': {h:0,c:'off',t:'fuera'},
-    '2026-12-10': {h:3.5,c:'part',t:'3,5 h'}
+    '2026-12-10': {h:4,c:'part',t:'4 h'}
   };
 
   const pad = n => String(n).padStart(2,'0');
@@ -362,17 +362,24 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(special[s]) return special[s];
     const d=fromKey(s), dow=d.getDay();
     if(dow===6) return {h:0,c:'off',t:'francés'};
-    if(dow===2 || dow===5) return {h:3.5,c:'part',t:'3,5 h'};
+    if(dow===2 || dow===5){
+      if(s>='2026-10-02') return {h:4,c:'part',t:'4 h'};
+      return {h:3.5,c:'part',t:'3,5 h'};
+    }
     if(s>='2027-01-11' && s<='2027-01-15') return {h:7.5,c:'final',t:s==='2027-01-15'?'ENTREGA · colchón':'colchón · 7,5 h'};
     return {h:7.5,c:'full',t:'7,5 h'};
   }
 
   function sessionSchedule(s){
-    if(s==='2026-10-05') return '10:30–13:00 y 16:00–20:00';
+    if(s==='2026-10-05') return '10:30–13:30 y 16:00–19:30';
     if(s==='2026-10-17') return '16:00–20:00';
-    if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:00 y 16:00–20:00';
-    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:00';
+    if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:30';
     const d=fromKey(s), dow=d.getDay();
+    if(s>='2026-10-02'){
+      if(dow===2 || dow===5) return '9:30–13:30';
+      return '9:30–13:30 y 16:00–19:30';
+    }
     if(dow===2 || dow===5) return '9:30–13:00';
     return '9:30–13:00 y 16:00–20:00';
   }
@@ -407,10 +414,13 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     const h=document.createElement('h2'); h.textContent=`${monthNames[m]} ${y}`; sec.appendChild(h);
     const grid=document.createElement('div'); grid.className='grid';
     ['L','M','X','J','V','S','D'].forEach(x=>{ const e=document.createElement('div');e.className='dow';e.textContent=x;grid.appendChild(e); });
-    let first=(new Date(y,m,1).getDay()+6)%7;
-    for(let i=0;i<first;i++){ const b=document.createElement('div');b.className='day blank';grid.appendChild(b); }
     const count=new Date(y,m+1,0).getDate();
-    for(let n=1;n<=count;n++){
+    const displayStartDate=fromKey(DISPLAY_START);
+    const isStartMonth=(y===displayStartDate.getFullYear() && m===displayStartDate.getMonth());
+    const firstDayNumber=isStartMonth ? displayStartDate.getDate() : 1;
+    let first=(new Date(y,m,firstDayNumber).getDay()+6)%7;
+    for(let i=0;i<first;i++){ const b=document.createElement('div');b.className='day blank';grid.appendChild(b); }
+    for(let n=firstDayNumber;n<=count;n++){
       const d=new Date(y,m,n,12,0,0,0), s=key(d), box=document.createElement('div');
       if(s<DISPLAY_START||s>END){ box.className='day blank';grid.appendChild(box);continue; }
       const x=info(s);
@@ -464,9 +474,12 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionEndMinutes(s){
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
-    if(s==='2026-10-05') return 20*60;
-    if(s==='2026-10-09' || s==='2026-10-17' || s==='2026-10-23') return 20*60;
-    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60;
+    if(s==='2026-10-17') return 20*60;
+    if(s>='2026-10-02'){
+      const dow=fromKey(s).getDay();
+      if((dow===2 || dow===5) || s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60+30;
+      return 19*60+30;
+    }
     const dow=fromKey(s).getDay();
     if(dow===2 || dow===5) return 13*60;
     return 20*60;
