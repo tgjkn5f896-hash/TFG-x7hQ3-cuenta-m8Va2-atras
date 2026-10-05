@@ -136,6 +136,14 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 .extra-note{font-size:11px;color:var(--muted);margin-top:5px}.extra-note:empty{display:none}
 .log-title{font-size:11px;font-weight:700;margin:12px 0 5px}
 .log-list{display:grid;gap:5px}
+.log-toggle-wrap{margin-top:8px}
+.log-toggle{
+  min-height:36px;
+  padding:7px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:650;
+}
 .log-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border-top:1px solid var(--border);padding-top:6px;font-size:11px}
 .log-meta{color:var(--muted)}
 .log-row button{padding:4px 8px;min-height:30px;font-size:10px}
@@ -266,6 +274,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
     <div class="log-title">Registros</div>
     <div id="logList" class="log-list"></div>
+    <div id="logToggleWrap" class="log-toggle-wrap" hidden>
+      <button id="logToggle" class="log-toggle" type="button">Ver más</button>
+    </div>
   </section>
 
   <section class="ects-section" aria-labelledby="ectsTitle">
@@ -315,6 +326,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-03': {h:0,c:'off',t:'fuera (tour Atlético)'},
     '2026-10-04': {h:0,c:'off',t:'fuera'},
     '2026-10-05': {h:6.5,c:'part',t:'6,5 h'},
+    '2026-10-06': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-10-07': {h:4,c:'part',t:'4 h'},
     '2026-10-09': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-11': {h:0,c:'off',t:'fuera'},
     '2026-10-17': {h:4,c:'part',t:'4 h'},
@@ -342,6 +355,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const todayKey = key(today);
   const STORAGE_KEY = 'tfg_real_hours_v1';
   let records = {};
+  let showAllLogs = false;
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     records = saved ? JSON.parse(saved) : {};
@@ -372,6 +386,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
 
   function sessionSchedule(s){
     if(s==='2026-10-05') return '10:30–13:30 y 16:00–19:30';
+    if(s==='2026-10-06') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-10-07') return '9:30–13:30';
     if(s==='2026-10-17') return '16:00–20:00';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:30';
@@ -474,6 +490,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionEndMinutes(s){
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
+    if(s==='2026-10-06') return 19*60+30;
+    if(s==='2026-10-07') return 13*60+30;
     if(s==='2026-10-17') return 20*60;
     if(s>='2026-10-02'){
       const dow=fromKey(s).getDay();
@@ -562,12 +580,20 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
       ? `Faltan ${fmtHours(ectsRemaining)} ECTS`
       : '12 ECTS completados';
 
-    const list=document.getElementById('logList'); list.innerHTML='';
+    const list=document.getElementById('logList');
+    const toggleWrap=document.getElementById('logToggleWrap');
+    const toggleBtn=document.getElementById('logToggle');
+    list.innerHTML='';
     if(!manualKeys.length){
+      toggleWrap.hidden=true;
       const empty=document.createElement('div'); empty.className='empty-log'; empty.textContent='Todavía no has registrado ninguna sesión.'; list.appendChild(empty);
       return;
     }
-    [...manualKeys].reverse().forEach(s=>{
+
+    const orderedKeys=[...manualKeys].reverse();
+    const visibleKeys=showAllLogs ? orderedKeys : orderedKeys.slice(0,3);
+
+    visibleKeys.forEach(s=>{
       const d=fromKey(s), p=info(s).h, a=Number(records[s])||0;
       const row=document.createElement('div'); row.className='log-row';
       const left=document.createElement('div');
@@ -577,6 +603,14 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
       const del=document.createElement('button'); del.type='button'; del.textContent='Eliminar'; del.dataset.delete=s;
       row.append(left,diff,del); list.appendChild(row);
     });
+
+    if(orderedKeys.length>3){
+      toggleWrap.hidden=false;
+      toggleBtn.textContent=showAllLogs?'Ver menos':`Ver más (${orderedKeys.length-3})`;
+    }else{
+      toggleWrap.hidden=true;
+      showAllLogs=false;
+    }
   }
 
   workDate.addEventListener('change',updatePlanHint);
@@ -596,6 +630,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     const btn=e.target.closest('button[data-delete]'); if(!btn)return;
     delete records[btn.dataset.delete]; saveRecords(); renderPerformance(); syncWorkedStars(); updatePlanHint();
     trackMsg.textContent='Registro eliminado.';
+  });
+  document.getElementById('logToggle').addEventListener('click',()=>{
+    showAllLogs=!showAllLogs;
+    renderPerformance();
   });
   updatePlanHint(); renderPerformance(); syncWorkedStars();
 
