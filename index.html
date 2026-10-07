@@ -313,7 +313,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 428.5;
+  const TOTAL_HOURS = 427.5;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -327,7 +327,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-04': {h:0,c:'off',t:'fuera'},
     '2026-10-05': {h:6.5,c:'part',t:'6,5 h'},
     '2026-10-06': {h:7.5,c:'full',t:'7,5 h'},
-    '2026-10-07': {h:4,c:'part',t:'4 h'},
+    '2026-10-07': {h:6.5,c:'part',t:'6,5 h'},
+    '2026-10-08': {h:4,c:'part',t:'4 h'},
     '2026-10-09': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-11': {h:0,c:'off',t:'fuera'},
     '2026-10-17': {h:4,c:'part',t:'4 h'},
@@ -387,7 +388,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function sessionSchedule(s){
     if(s==='2026-10-05') return '10:30–13:30 y 16:00–19:30';
     if(s==='2026-10-06') return '9:30–13:30 y 16:00–19:30';
-    if(s==='2026-10-07') return '9:30–13:30';
+    if(s==='2026-10-07') return '9:30–13:30 y 16:00–18:30';
+    if(s==='2026-10-08') return '9:30–13:30';
     if(s==='2026-10-17') return '16:00–20:00';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:30';
@@ -491,7 +493,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     const p=Math.max(0,info(s).h);
     if(p<=0) return null;
     if(s==='2026-10-06') return 19*60+30;
-    if(s==='2026-10-07') return 13*60+30;
+    if(s==='2026-10-07') return 18*60+30;
+    if(s==='2026-10-08') return 13*60+30;
     if(s==='2026-10-17') return 20*60;
     if(s>='2026-10-02'){
       const dow=fromKey(s).getDay();
