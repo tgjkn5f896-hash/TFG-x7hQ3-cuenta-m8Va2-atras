@@ -295,7 +295,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     </div>
   </section>
 
-  <div class="footer">📥 Entrega: 15 de enero de 2027<br><br>🎄 Bloque navideño: 18 de diciembre–10 de enero<br><br>🟢 Día completo: 7,5 h (9:30–13:30 y 16:00–19:30)<br><br>🟡 Día parcial: 4 h (9:30–13:30)</div>
+  <div class="footer">📥 Entrega: 15 de enero de 2027<br><br>🎄 Bloque navideño: 19 de diciembre–10 de enero<br><br>🟢 Día completo: 7,5 h (9:30–13:30 y 16:00–19:30)<br><br>🟡 Día parcial: 4 h (9:30–13:30)</div>
 
   <section class="backup-tools" aria-label="Copia de seguridad">
     <h3>Copia de seguridad</h3>
@@ -333,7 +333,6 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-11': {h:0,c:'off',t:'fuera'},
     '2026-10-15': {h:4,c:'part',t:'4 h'},
     '2026-10-16': {h:7.5,c:'full',t:'7,5 h'},
-    '2026-10-17': {h:4,c:'part',t:'4 h'},
     '2026-10-23': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-25': {h:0,c:'off',t:'fuera (Granja)'},
     '2026-10-30': {h:0,c:'off',t:'fuera (surf)'},
@@ -343,7 +342,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-11-12': {h:4,c:'part',t:'4 h'},
     '2026-11-26': {h:4,c:'part',t:'4 h (Thanksgiving)'},
     '2026-11-27': {h:0,c:'off',t:'fuera'},
-    '2026-12-10': {h:4,c:'part',t:'4 h'}
+    '2026-12-10': {h:4,c:'part',t:'4 h'},
+    '2026-12-18': {h:4,c:'part',t:'4 h'}
   };
 
   const pad = n => String(n).padStart(2,'0');
@@ -375,8 +375,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   }
 
   function info(s){
-    if(s >= '2026-12-18' && s <= '2027-01-10') return {h:0,c:'dead',t:s==='2027-01-10'?'último día muerto':'Navidad'};
     if(special[s]) return special[s];
+    if(s >= '2026-12-19' && s <= '2027-01-10') return {h:0,c:'dead',t:s==='2027-01-10'?'último día muerto':'Navidad'};
     const d=fromKey(s), dow=d.getDay();
     if(dow===6) return {h:0,c:'off',t:'francés'};
     if(dow===2 || dow===5){
@@ -394,9 +394,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-08') return '9:30–13:30';
     if(s==='2026-10-15') return '9:30–13:30';
     if(s==='2026-10-16') return '9:30–13:30 y 16:00–19:30';
-    if(s==='2026-10-17') return '16:00–20:00';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
-    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return '9:30–13:30';
+    if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return '9:30–13:30';
     const d=fromKey(s), dow=d.getDay();
     if(s>='2026-10-02'){
       if(dow===2 || dow===5) return '9:30–13:30';
@@ -501,10 +500,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-08') return 13*60+30;
     if(s==='2026-10-15') return 13*60+30;
     if(s==='2026-10-16') return 19*60+30;
-    if(s==='2026-10-17') return 20*60;
     if(s>='2026-10-02'){
       const dow=fromKey(s).getDay();
-      if((dow===2 || dow===5) || s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10') return 13*60+30;
+      if((dow===2 || dow===5) || s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return 13*60+30;
       return 19*60+30;
     }
     const dow=fromKey(s).getDay();
