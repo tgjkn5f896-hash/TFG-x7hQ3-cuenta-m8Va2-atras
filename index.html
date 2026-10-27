@@ -335,6 +335,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-16': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-23': {h:7.5,c:'full',t:'7,5 h'},
     '2026-10-25': {h:0,c:'off',t:'fuera (Granja)'},
+    '2026-10-27': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-10-29': {h:4,c:'part',t:'4 h'},
     '2026-10-30': {h:0,c:'off',t:'fuera (surf)'},
     '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-01': {h:0,c:'off',t:'fuera (surf)'},
@@ -394,6 +396,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-08') return '9:30–13:30';
     if(s==='2026-10-15') return '9:30–13:30';
     if(s==='2026-10-16') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-10-27') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-10-29') return '9:30–13:30';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return '9:30–13:30';
     const d=fromKey(s), dow=d.getDay();
@@ -500,6 +504,8 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-08') return 13*60+30;
     if(s==='2026-10-15') return 13*60+30;
     if(s==='2026-10-16') return 19*60+30;
+    if(s==='2026-10-27') return 19*60+30;
+    if(s==='2026-10-29') return 13*60+30;
     if(s>='2026-10-02'){
       const dow=fromKey(s).getDay();
       if((dow===2 || dow===5) || s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return 13*60+30;
