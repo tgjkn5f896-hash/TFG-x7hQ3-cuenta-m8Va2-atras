@@ -313,7 +313,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 421;
+  const TOTAL_HOURS = 424.5;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -341,6 +341,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-10-31': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-01': {h:0,c:'off',t:'fuera (surf)'},
     '2026-11-02': {h:0,c:'off',t:'fuera (surf)'},
+    '2026-11-06': {h:7.5,c:'full',t:'7,5 h'},
     '2026-11-03': {h:7.5,c:'full',t:'7,5 h'},
     '2026-11-04': {h:4,c:'part',t:'4 h'},
     '2026-11-08': {h:0,c:'off',t:'fuera (NFL)'},
@@ -403,6 +404,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-29') return '9:30–13:30';
     if(s==='2026-11-03') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-04') return '9:30–13:30';
+    if(s==='2026-11-06') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return '9:30–13:30';
     const d=fromKey(s), dow=d.getDay();
@@ -513,6 +515,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-10-29') return 13*60+30;
     if(s==='2026-11-03') return 19*60+30;
     if(s==='2026-11-04') return 13*60+30;
+    if(s==='2026-11-06') return 19*60+30;
     if(s>='2026-10-02'){
       const dow=fromKey(s).getDay();
       if((dow===2 || dow===5) || s==='2026-11-12' || s==='2026-11-26' || s==='2026-12-10' || s==='2026-12-18') return 13*60+30;
