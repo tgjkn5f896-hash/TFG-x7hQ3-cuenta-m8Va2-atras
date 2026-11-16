@@ -56,14 +56,42 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   z-index:2;
   clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 56%,79% 94%,50% 72%,21% 94%,32% 56%,2% 35%,39% 35%);
   background:
-    radial-gradient(circle at 27% 30%,rgba(255,255,255,.82) 0 1.3px,transparent 2px),
-    radial-gradient(circle at 69% 24%,rgba(246,252,239,.78) 0 1.1px,transparent 1.8px),
-    radial-gradient(circle at 73% 68%,rgba(255,255,255,.74) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 35% 73%,rgba(238,249,229,.78) 0 1.2px,transparent 2px),
-    linear-gradient(135deg,#c6dfb5 0%,#a4cb8d 35%,#cbe2bd 62%,#94bd7d 100%);
-  filter:drop-shadow(0 0 .6px rgba(65,92,57,.55)) drop-shadow(0 1px 1px rgba(44,63,39,.20));
+    radial-gradient(circle at 26% 27%,rgba(255,255,255,.96) 0 1.4px,transparent 2.1px),
+    radial-gradient(circle at 68% 24%,rgba(239,255,221,.92) 0 1.15px,transparent 1.9px),
+    radial-gradient(circle at 73% 69%,rgba(255,255,255,.88) 0 1.05px,transparent 1.9px),
+    radial-gradient(circle at 34% 74%,rgba(220,249,194,.90) 0 1.25px,transparent 2.1px),
+    linear-gradient(135deg,#b9e879 0%,#82c946 34%,#a9df69 61%,#65ad35 100%);
+  filter:
+    drop-shadow(0 0 1.6px rgba(104,174,54,.88))
+    drop-shadow(0 1px 1px rgba(55,102,31,.38));
 }
-@media(max-width:700px){.worked-star{width:11px;height:11px;top:8px;right:7px}}
+.worked-star.extra{
+  background:
+    radial-gradient(circle at 24% 25%,rgba(255,255,255,.95) 0 1.5px,transparent 2.2px),
+    radial-gradient(circle at 73% 28%,rgba(255,249,216,.95) 0 1.2px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.88) 0 1.1px,transparent 1.9px),
+    radial-gradient(circle at 34% 76%,rgba(255,242,184,.92) 0 1.3px,transparent 2.1px),
+    linear-gradient(135deg,#ffe08a 0%,#f5b942 36%,#ffd86a 64%,#e89b20 100%);
+  filter:
+    drop-shadow(0 0 2px rgba(245,185,66,.95))
+    drop-shadow(0 1px 1px rgba(126,77,0,.35));
+}
+.worked-check{
+  position:absolute;
+  top:5px;
+  right:6px;
+  pointer-events:none;
+  z-index:2;
+  font-size:17px;
+  line-height:1;
+  font-weight:800;
+  color:#7da36b;
+  text-shadow:0 1px 1px rgba(255,255,255,.9);
+}
+@media(max-width:700px){
+  .worked-star{width:11px;height:11px;top:8px;right:7px}
+  .worked-check{font-size:14px;top:5px;right:5px}
+}
 .nextbox{margin-top:14px;margin-bottom:18px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
 .nextbox h3{font-size:14px;margin:0 0 6px}
 .nextbox p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
@@ -567,17 +595,38 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   function syncWorkedStars(){
     document.querySelectorAll('.day[data-date]').forEach(box=>{
       const s=box.dataset.date;
-      const shouldShow=(Number(records[s])||0)>0;
-      let star=box.querySelector('.worked-star');
-      if(shouldShow && !star){
-        star=document.createElement('span');
-        star.className='worked-star';
-        star.setAttribute('aria-label','Día trabajado');
-        star.title='Día trabajado';
-        box.appendChild(star);
-      }else if(!shouldShow && star){
-        star.remove();
+      const actual=Math.max(0,Number(records[s])||0);
+      const planned=Math.max(0,Number(info(s).h)||0);
+      const tolerance=0.01;
+
+      const existing=box.querySelector('.worked-star, .worked-check');
+      if(existing) existing.remove();
+
+      if(actual<=0) return;
+
+      if(actual < planned - tolerance){
+        const check=document.createElement('span');
+        check.className='worked-check';
+        check.textContent='✓';
+        check.setAttribute('aria-label','Horas realizadas por debajo de lo planificado');
+        check.title=`Menos de lo planificado: ${fmtHours(actual)} h de ${fmtHours(planned)} h`;
+        box.appendChild(check);
+        return;
       }
+
+      const star=document.createElement('span');
+      star.className='worked-star';
+
+      if(actual > planned + tolerance){
+        star.classList.add('extra');
+        star.setAttribute('aria-label','Horas realizadas por encima de lo planificado');
+        star.title=`Más de lo planificado: ${fmtHours(actual)} h frente a ${fmtHours(planned)} h`;
+      }else{
+        star.setAttribute('aria-label','Horas planificadas completadas');
+        star.title=`Plan completado: ${fmtHours(actual)} h`;
+      }
+
+      box.appendChild(star);
     });
   }
 
