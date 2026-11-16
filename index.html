@@ -313,7 +313,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 424.5;
+  const TOTAL_HOURS = 421;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -346,10 +346,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-11-04': {h:4,c:'part',t:'4 h'},
     '2026-11-08': {h:0,c:'off',t:'fuera (NFL)'},
     '2026-11-09': {h:0,c:'off',t:'fuera (outlet)'},
-    '2026-11-10': {h:7.5,c:'full',t:'7,5 h'},
-    '2026-11-13': {h:7.5,c:'full',t:'7,5 h'},
-    '2026-11-14': {h:4,c:'part',t:'4 h'},
-    '2026-11-15': {h:4,c:'part',t:'4 h'},
+    '2026-11-10': {h:4,c:'part',t:'4 h'},
+    '2026-11-13': {h:4,c:'part',t:'4 h'},
+    '2026-11-14': {h:0,c:'off',t:'francés'},
+    '2026-11-15': {h:0,c:'off',t:'fuera'},
     '2026-11-17': {h:7.5,c:'full',t:'7,5 h'},
     '2026-11-19': {h:4,c:'part',t:'4 h'},
     '2026-11-20': {h:7.5,c:'full',t:'7,5 h'},
@@ -360,7 +360,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-12-04': {h:7.5,c:'full',t:'7,5 h'},
     '2026-12-06': {h:4,c:'part',t:'4 h (dune)'},
     '2026-12-10': {h:4,c:'part',t:'4 h'},
-    '2026-12-18': {h:4,c:'part',t:'4 h'}
+    '2026-12-18': {h:4,c:'part',t:'4 h'},
+    '2026-12-19': {h:0,c:'dead',t:'Navidad (cumpleaños)'},
+    '2026-12-21': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-12-22': {h:4,c:'part',t:'4 h'}
   };
 
   const pad = n => String(n).padStart(2,'0');
@@ -416,8 +419,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-11-03') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-04') return '9:30–13:30';
     if(s==='2026-11-06') return '9:30–13:30 y 16:00–19:30';
-    if(s==='2026-11-10' || s==='2026-11-13') return '9:30–13:30 y 16:00–19:30';
-    if(s==='2026-11-14' || s==='2026-11-15') return '9:30–13:30';
+    if(s==='2026-11-10' || s==='2026-11-13') return '9:30–13:30';
+    if(s==='2026-12-21') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-12-22') return '9:30–13:30';
     if(s==='2026-11-17' || s==='2026-11-20') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-19' || s==='2026-11-22') return '9:30–13:30';
     if(s==='2026-12-04') return '9:30–13:30 y 16:00–19:30';
@@ -533,8 +537,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-11-03') return 19*60+30;
     if(s==='2026-11-04') return 13*60+30;
     if(s==='2026-11-06') return 19*60+30;
-    if(s==='2026-11-10' || s==='2026-11-13') return 19*60+30;
-    if(s==='2026-11-14' || s==='2026-11-15') return 13*60+30;
+    if(s==='2026-11-10' || s==='2026-11-13') return 13*60+30;
+    if(s==='2026-12-21') return 19*60+30;
+    if(s==='2026-12-22') return 13*60+30;
     if(s==='2026-11-17' || s==='2026-11-20') return 19*60+30;
     if(s==='2026-11-19' || s==='2026-11-22') return 13*60+30;
     if(s==='2026-12-04') return 19*60+30;
