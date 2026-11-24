@@ -343,7 +343,7 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
   const DISPLAY_START = '2026-09-26';
   const START = '2026-09-26';
   const END = '2027-01-15';
-  const TOTAL_HOURS = 425;
+  const TOTAL_HOURS = 425.5;
   const ECTS_TOTAL = 12;
   const HOURS_PER_ECTS = 27;
   const ECTS_TOTAL_HOURS = ECTS_TOTAL * HOURS_PER_ECTS;
@@ -390,9 +390,10 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     '2026-11-26': {h:4,c:'part',t:'4 h (Thanksgiving)'},
     '2026-11-27': {h:4,c:'part',t:'4 h'},
     '2026-11-28': {h:4,c:'off',t:'francés · 4 h'},
-    '2026-12-01': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-12-01': {h:4,c:'part',t:'4 h'},
     '2026-12-03': {h:4,c:'part',t:'4 h'},
     '2026-12-04': {h:7.5,c:'full',t:'7,5 h'},
+    '2026-12-05': {h:4,c:'off',t:'francés · 4 h'},
     '2026-12-07': {h:0,c:'off',t:'fuera (Puydufou)'},
     '2026-12-08': {h:7.5,c:'full',t:'7,5 h'},
     '2026-12-11': {h:7.5,c:'full',t:'7,5 h'},
@@ -466,8 +467,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-11-24') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-11-29') return '9:30–13:30';
     if(s==='2026-11-27' || s==='2026-11-28') return '9:30–13:30';
-    if(s==='2026-12-01' || s==='2026-12-08' || s==='2026-12-11') return '9:30–13:30 y 16:00–19:30';
+    if(s==='2026-12-08' || s==='2026-12-11') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-12-03' || s==='2026-12-13') return '9:30–13:30';
+    if(s==='2026-12-01' || s==='2026-12-05') return '9:30–13:30';
     if(s==='2026-12-04') return '9:30–13:30 y 16:00–19:30';
     if(s==='2026-12-06') return '9:30–13:30';
     if(s==='2026-10-09' || s==='2026-10-23') return '9:30–13:30 y 16:00–19:30';
@@ -589,8 +591,9 @@ button.active{background:#2d2d2d;color:white;border-color:#2d2d2d}
     if(s==='2026-11-24') return 19*60+30;
     if(s==='2026-11-29') return 13*60+30;
     if(s==='2026-11-27' || s==='2026-11-28') return 13*60+30;
-    if(s==='2026-12-01' || s==='2026-12-08' || s==='2026-12-11') return 19*60+30;
+    if(s==='2026-12-08' || s==='2026-12-11') return 19*60+30;
     if(s==='2026-12-03' || s==='2026-12-13') return 13*60+30;
+    if(s==='2026-12-01' || s==='2026-12-05') return 13*60+30;
     if(s==='2026-12-04') return 19*60+30;
     if(s==='2026-12-06') return 13*60+30;
     if(s>='2026-10-02'){
